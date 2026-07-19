@@ -10,7 +10,6 @@
   :root {
     --bg: #ffffff; --fg: #1c2030; --muted: #5b6272; --card: #f4f5f8;
     --accent: #2f66d0; --accent-fg: #ffffff; --border: #e3e5ec;
-    --gold: #f4b942;
   }
   @media (prefers-color-scheme: dark) {
     :root {
@@ -34,8 +33,8 @@
   }
   .hero { text-align: center; padding: 48px 0 32px; }
   .hero img.appicon { width: 128px; height: 128px; margin-bottom: 20px; }
-  h1 { font-size: 2.4rem; line-height: 1.2; letter-spacing: -.02em; margin-bottom: 14px; }
-  .tagline { font-size: 1.15rem; color: var(--muted); max-width: 620px; margin: 0 auto 28px; }
+  h1 { font-size: 2.4rem; line-height: 1.25; letter-spacing: -.02em; margin-bottom: 14px; }
+  .tagline { font-size: 1.15rem; color: var(--muted); max-width: 640px; margin: 0 auto 28px; }
   .cta {
     display: inline-block; background: var(--accent); color: var(--accent-fg);
     font-weight: 600; font-size: 1.05rem; padding: 13px 30px; border-radius: 12px;
@@ -62,13 +61,14 @@
   .faq { max-width: 720px; margin: 0 auto; }
   .faq details { border-bottom: 1px solid var(--border); padding: 14px 0; }
   .faq summary { cursor: pointer; font-weight: 600; }
-  .faq p { margin-top: 8px; color: var(--muted); font-size: .95rem; }
+  .faq details p { margin-top: 8px; color: var(--muted); font-size: .95rem; }
   footer { margin-top: 64px; padding: 28px 0 40px; border-top: 1px solid var(--border);
            text-align: center; color: var(--muted); font-size: .88rem; }
   footer a { color: var(--muted); }
-  [data-zh] { display: none; }
-  html.zh [data-en] { display: none; }
-  html.zh [data-zh] { display: revert; }
+  /* Language switching: hide the inactive language, never touch the shown
+     element's own display value (no `revert` — it breaks block/inline). */
+  html:not(.zh) [data-zh] { display: none !important; }
+  html.zh [data-en] { display: none !important; }
 </style>
 </head>
 <body>
@@ -82,21 +82,21 @@
 <div class="hero">
   <img class="appicon" src="assets/icon-256.png" alt="Clocksmith icon">
   <h1 data-en>Your Mac runs things on a schedule.<br>Now you can actually see them.</h1>
-  <h1 data-zh>你的 Mac 上有一堆定時任務。<br>現在你終於看得到它們了。</h1>
+  <h1 data-zh>你的 Mac 每天默默在跑排程，<br>現在終於看得見了。</h1>
   <p class="tagline" data-en>
     Scripts, backups, AI agents, reports — anything scheduled on your Mac with launchd.
     Clocksmith shows when each job last ran, whether it succeeded, and lets you
     run, pause, or reschedule it. No Terminal required.
   </p>
   <p class="tagline" data-zh>
-    腳本、備份、AI 自動任務、報表——所有用 launchd 排程的工作，
-    Clocksmith 讓你一眼看到上次跑了沒、成功沒，並且可以立即執行、暫停或改時間。
-    完全不用打指令。
+    腳本、備份、AI 自動任務、每日報表——只要是 Mac 上排程執行的工作，
+    Clocksmith 都讓你一目了然：上次幾點跑的、成功還是失敗，
+    還能隨時手動執行、暫停，或直接改時間。全程不用碰終端機。
   </p>
   <a class="cta" href="#buy" data-en>Buy for $4.99</a>
-  <a class="cta" href="#buy" data-zh>購買 US$4.99</a>
+  <a class="cta" href="#buy" data-zh>立即購買 US$4.99</a>
   <span class="cta-sub" data-en>One-time purchase · macOS 14+ · Notarized by Apple</span>
-  <span class="cta-sub" data-zh>買斷制・macOS 14+・經 Apple 公證</span>
+  <span class="cta-sub" data-zh>一次買斷・macOS 14 以上・已通過 Apple 公證</span>
 
   <div class="shot">
     <img data-en src="assets/screenshot-en.png" alt="Clocksmith screenshot">
@@ -106,27 +106,27 @@
 
 <section>
   <h2 data-en>What it does</h2>
-  <h2 data-zh>它能做什麼</h2>
+  <h2 data-zh>它能幫你做什麼</h2>
   <div class="features">
     <div class="feature"><div class="emoji">👀</div>
-      <h3 data-en>See every scheduled job</h3><h3 data-zh>一眼看到所有排程</h3>
+      <h3 data-en>See every scheduled job</h3><h3 data-zh>所有排程一目了然</h3>
       <p data-en>Everything in your LaunchAgents — yours and third-party — with live status dots: running, healthy, failed, or disabled.</p>
-      <p data-zh>你的和第三方的 LaunchAgents 全部列出，狀態燈即時顯示：執行中、正常、失敗、已停用。</p>
+      <p data-zh>不管是你自己建的，還是其他軟體偷偷裝的，全部列出來。狀態燈即時更新：執行中、正常、失敗、已停用，一眼分清楚。</p>
     </div>
     <div class="feature"><div class="emoji">🕐</div>
-      <h3 data-en>Know it actually ran</h3><h3 data-zh>確認真的跑過了</h3>
+      <h3 data-en>Know it actually ran</h3><h3 data-zh>確認它真的有跑</h3>
       <p data-en>Last-run history straight from the system log: start → end time, duration, and exit status. Catch silent failures at a glance.</p>
-      <p data-zh>直接從系統日誌撈出上次執行紀錄：起訖時間、歷時、結束代碼。默默失敗的任務一眼抓出來。</p>
+      <p data-zh>直接從系統日誌調出執行紀錄：幾點開始、幾點結束、花了多久、有沒有出錯。悄悄失敗的任務再也躲不掉。</p>
     </div>
     <div class="feature"><div class="emoji">▶️</div>
-      <h3 data-en>Run, pause, reschedule</h3><h3 data-zh>立即執行、暫停、改時間</h3>
+      <h3 data-en>Run, pause, reschedule</h3><h3 data-zh>想跑就跑，想改就改</h3>
       <p data-en>Run a job now, toggle it on/off, or change its daily run time — with automatic config backup before every change.</p>
-      <p data-zh>隨時手動執行、開關排程、修改每天的執行時間——每次改動前都自動備份設定檔。</p>
+      <p data-zh>立即執行、一鍵開關、直接調整每天的執行時間——而且每次修改前都會自動備份設定檔，改壞了也救得回來。</p>
     </div>
     <div class="feature"><div class="emoji">🛡️</div>
-      <h3 data-en>Safe by design</h3><h3 data-zh>安全至上</h3>
+      <h3 data-en>Safe by design</h3><h3 data-zh>安全擺第一</h3>
       <p data-en>Backup → edit → verify → auto-restore on failure. Third-party jobs need explicit confirmation. No data ever leaves your Mac.</p>
-      <p data-zh>備份 → 修改 → 驗證 → 失敗自動還原。動到第三方排程會先跳確認。所有資料都留在你的 Mac 上。</p>
+      <p data-zh>每次修改都是「備份 → 寫入 → 驗證」，失敗自動還原。要動到其他軟體的排程會先跟你確認。你的資料完全不會離開你的 Mac。</p>
     </div>
   </div>
 </section>
@@ -135,9 +135,9 @@
   <h2 data-en>Pricing</h2>
   <h2 data-zh>價格</h2>
   <div class="price-card">
-    <div class="price">$4.99 <small data-en>one-time</small><small data-zh>買斷</small></div>
+    <div class="price">$4.99 <small data-en>one-time</small><small data-zh>一次買斷</small></div>
     <ul>
-      <li data-en>✓ All features, no subscription</li><li data-zh>✓ 完整功能，不是訂閱制</li>
+      <li data-en>✓ All features, no subscription</li><li data-zh>✓ 功能全開，沒有訂閱制</li>
       <li data-en>✓ Signed &amp; notarized by Apple</li><li data-zh>✓ Apple 簽名＋公證</li>
       <li data-en>✓ Free updates for 1.x</li><li data-zh>✓ 1.x 版本免費更新</li>
     </ul>
@@ -145,7 +145,7 @@
     <a class="cta" href="LEMON_SQUEEZY_URL" data-en>Buy Clocksmith</a>
     <a class="cta" href="LEMON_SQUEEZY_URL" data-zh>購買 Clocksmith</a>
     <span class="cta-sub" data-en>Secure checkout &amp; instant download via Lemon Squeezy</span>
-    <span class="cta-sub" data-zh>透過 Lemon Squeezy 安全結帳，付款後立即下載</span>
+    <span class="cta-sub" data-zh>由 Lemon Squeezy 安全結帳，付款後馬上下載</span>
   </div>
 </section>
 
@@ -154,34 +154,29 @@
   <h2 data-zh>常見問題</h2>
   <div class="faq">
     <details>
-      <summary data-en>Why isn't this on the Mac App Store?</summary>
-      <summary data-zh>為什麼不在 Mac App Store 上架？</summary>
+      <summary><span data-en>Why isn't this on the Mac App Store?</span><span data-zh>為什麼不在 Mac App Store 上架？</span></summary>
       <p data-en>App Store apps must run in a sandbox that forbids managing launchd jobs — the entire point of Clocksmith. So it's sold directly instead, signed and notarized by Apple like any trustworthy Mac app.</p>
-      <p data-zh>App Store 規定 app 必須進沙盒，而沙盒禁止管理 launchd 排程——這正是 Clocksmith 的核心功能。所以改為直接販售，一樣有 Apple 簽名與公證，安全性相同。</p>
+      <p data-zh>App Store 規定上架的 app 必須關進「沙盒」，而沙盒剛好禁止管理 launchd 排程——這正是 Clocksmith 的核心功能。所以改成官網直售，但一樣經過 Apple 的簽名與公證把關，安全性不打折。</p>
     </details>
     <details>
-      <summary data-en>What are "scheduled jobs" exactly?</summary>
-      <summary data-zh>「排程任務」到底是什麼？</summary>
+      <summary><span data-en>What are "scheduled jobs" exactly?</span><span data-zh>「排程任務」到底是什麼？</span></summary>
       <p data-en>macOS runs background tasks via launchd, configured by plist files in ~/Library/LaunchAgents. Scripts you (or your AI tools) set up to run daily, app updaters, sync helpers — Clocksmith reads and manages the user-level ones.</p>
-      <p data-zh>macOS 用 launchd 執行背景任務，設定放在 ~/Library/LaunchAgents。你（或你的 AI 工具）設定的每日腳本、app 更新器、同步小幫手都在裡面——Clocksmith 讀取並管理使用者層級的這些排程。</p>
+      <p data-zh>macOS 內建一套叫 launchd 的排程系統，設定檔放在 ~/Library/LaunchAgents。你（或你的 AI 工具）設定的每日腳本、軟體的自動更新程式、同步小工具，都是靠它在背景執行。Clocksmith 負責幫你看管其中「使用者層級」的排程。</p>
     </details>
     <details>
-      <summary data-en>Does it collect any data?</summary>
-      <summary data-zh>會收集我的資料嗎？</summary>
+      <summary><span data-en>Does it collect any data?</span><span data-zh>會收集我的資料嗎？</span></summary>
       <p data-en>No. Clocksmith has no analytics, no network calls, no account. Everything stays on your Mac.</p>
-      <p data-zh>不會。Clocksmith 沒有任何分析追蹤、不連網、不用註冊帳號。所有資料都留在你的 Mac。</p>
+      <p data-zh>完全不會。沒有任何追蹤分析、不連網、也不用註冊帳號。所有東西都只留在你的 Mac 上。</p>
     </details>
     <details>
-      <summary data-en>Can it edit any schedule?</summary>
-      <summary data-zh>所有排程都能編輯嗎？</summary>
+      <summary><span data-en>Can it edit any schedule?</span><span data-zh>所有排程都能編輯嗎？</span></summary>
       <p data-en>It edits simple daily (HH:MM) schedules safely, with automatic backups. Complex configurations (file watchers, multiple times) are shown read-only rather than risk breaking them.</p>
-      <p data-zh>單純的「每天 時:分」排程可以安全編輯（自動備份）。複雜設定（檔案監看、多組時間）會以唯讀顯示，避免改壞。</p>
+      <p data-zh>單純「每天幾點幾分」的排程可以放心編輯（改之前會自動備份）。比較複雜的設定——像監看檔案變化、一天跑好幾次——會以唯讀方式顯示，避免不小心改壞。</p>
     </details>
     <details>
-      <summary data-en>System requirements?</summary>
-      <summary data-zh>系統需求？</summary>
+      <summary><span data-en>System requirements?</span><span data-zh>系統需求？</span></summary>
       <p data-en>macOS 14 (Sonoma) or later. Native Swift app, Apple Silicon &amp; Intel.</p>
-      <p data-zh>macOS 14（Sonoma）以上。原生 Swift app，Apple Silicon 與 Intel 都支援。</p>
+      <p data-zh>macOS 14（Sonoma）以上。原生 Swift 開發，Apple Silicon 和 Intel 都支援。</p>
     </details>
   </div>
 </section>
@@ -195,6 +190,7 @@
 <script>
   function setLang(zh) {
     document.documentElement.classList.toggle('zh', zh);
+    document.documentElement.lang = zh ? 'zh-Hant' : 'en';
     localStorage.setItem('clocksmith-lang', zh ? 'zh' : 'en');
   }
   function toggleLang() {
