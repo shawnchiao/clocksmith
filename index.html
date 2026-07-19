@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Clocksmith — keep your Mac's scheduled jobs on time</title>
+<meta name="description" content="Clocksmith is a native macOS app that shows every scheduled job (launchd agent) on your Mac — when it last ran, whether it succeeded, and lets you run, pause, or reschedule it without touching the Terminal.">
+<link rel="icon" href="assets/icon-256.png">
+<style>
+  :root {
+    --bg: #ffffff; --fg: #1c2030; --muted: #5b6272; --card: #f4f5f8;
+    --accent: #2f66d0; --accent-fg: #ffffff; --border: #e3e5ec;
+    --gold: #f4b942;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #12141c; --fg: #edeef2; --muted: #9aa1b5; --card: #1c1f2b;
+      --accent: #5d8ae8; --border: #2a2e3d;
+    }
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang TC",
+      "Noto Sans TC", sans-serif;
+    background: var(--bg); color: var(--fg); line-height: 1.6;
+  }
+  .wrap { max-width: 960px; margin: 0 auto; padding: 0 24px; }
+  header { padding: 20px 0; display: flex; justify-content: space-between; align-items: center; }
+  .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 1.1rem; }
+  .brand img { width: 36px; height: 36px; }
+  .lang-toggle {
+    background: var(--card); border: 1px solid var(--border); color: var(--fg);
+    border-radius: 999px; padding: 6px 14px; cursor: pointer; font-size: .9rem;
+  }
+  .hero { text-align: center; padding: 48px 0 32px; }
+  .hero img.appicon { width: 128px; height: 128px; margin-bottom: 20px; }
+  h1 { font-size: 2.4rem; line-height: 1.2; letter-spacing: -.02em; margin-bottom: 14px; }
+  .tagline { font-size: 1.15rem; color: var(--muted); max-width: 620px; margin: 0 auto 28px; }
+  .cta {
+    display: inline-block; background: var(--accent); color: var(--accent-fg);
+    font-weight: 600; font-size: 1.05rem; padding: 13px 30px; border-radius: 12px;
+    text-decoration: none; box-shadow: 0 4px 14px rgb(47 102 208 / .35);
+  }
+  .cta:hover { filter: brightness(1.08); }
+  .cta-sub { display: block; margin-top: 10px; font-size: .85rem; color: var(--muted); }
+  .shot { margin: 44px auto 0; max-width: 900px; }
+  .shot img { width: 100%; border-radius: 12px; box-shadow: 0 12px 40px rgb(0 0 0 / .18); border: 1px solid var(--border); }
+  section { padding: 56px 0 0; }
+  h2 { font-size: 1.5rem; margin-bottom: 20px; text-align: center; }
+  .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
+  .feature { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; }
+  .feature .emoji { font-size: 1.6rem; }
+  .feature h3 { font-size: 1.02rem; margin: 8px 0 6px; }
+  .feature p { font-size: .92rem; color: var(--muted); }
+  .price-card {
+    max-width: 380px; margin: 0 auto; text-align: center; background: var(--card);
+    border: 1px solid var(--border); border-radius: 18px; padding: 32px;
+  }
+  .price { font-size: 2.6rem; font-weight: 800; }
+  .price small { font-size: 1rem; font-weight: 500; color: var(--muted); }
+  .price-card ul { list-style: none; margin: 16px 0 22px; color: var(--muted); font-size: .95rem; }
+  .faq { max-width: 720px; margin: 0 auto; }
+  .faq details { border-bottom: 1px solid var(--border); padding: 14px 0; }
+  .faq summary { cursor: pointer; font-weight: 600; }
+  .faq p { margin-top: 8px; color: var(--muted); font-size: .95rem; }
+  footer { margin-top: 64px; padding: 28px 0 40px; border-top: 1px solid var(--border);
+           text-align: center; color: var(--muted); font-size: .88rem; }
+  footer a { color: var(--muted); }
+  [data-zh] { display: none; }
+  html.zh [data-en] { display: none; }
+  html.zh [data-zh] { display: revert; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="brand"><img src="assets/icon-256.png" alt=""> Clocksmith</div>
+  <button class="lang-toggle" onclick="toggleLang()"><span data-en>中文</span><span data-zh>English</span></button>
+</header>
+
+<div class="hero">
+  <img class="appicon" src="assets/icon-256.png" alt="Clocksmith icon">
+  <h1 data-en>Your Mac runs things on a schedule.<br>Now you can actually see them.</h1>
+  <h1 data-zh>你的 Mac 上有一堆定時任務。<br>現在你終於看得到它們了。</h1>
+  <p class="tagline" data-en>
+    Scripts, backups, AI agents, reports — anything scheduled on your Mac with launchd.
+    Clocksmith shows when each job last ran, whether it succeeded, and lets you
+    run, pause, or reschedule it. No Terminal required.
+  </p>
+  <p class="tagline" data-zh>
+    腳本、備份、AI 自動任務、報表——所有用 launchd 排程的工作，
+    Clocksmith 讓你一眼看到上次跑了沒、成功沒，並且可以立即執行、暫停或改時間。
+    完全不用打指令。
+  </p>
+  <a class="cta" href="#buy" data-en>Buy for $4.99</a>
+  <a class="cta" href="#buy" data-zh>購買 US$4.99</a>
+  <span class="cta-sub" data-en>One-time purchase · macOS 14+ · Notarized by Apple</span>
+  <span class="cta-sub" data-zh>買斷制・macOS 14+・經 Apple 公證</span>
+
+  <div class="shot">
+    <img data-en src="assets/screenshot-en.png" alt="Clocksmith screenshot">
+    <img data-zh src="assets/screenshot-zh.png" alt="Clocksmith 畫面截圖">
+  </div>
+</div>
+
+<section>
+  <h2 data-en>What it does</h2>
+  <h2 data-zh>它能做什麼</h2>
+  <div class="features">
+    <div class="feature"><div class="emoji">👀</div>
+      <h3 data-en>See every scheduled job</h3><h3 data-zh>一眼看到所有排程</h3>
+      <p data-en>Everything in your LaunchAgents — yours and third-party — with live status dots: running, healthy, failed, or disabled.</p>
+      <p data-zh>你的和第三方的 LaunchAgents 全部列出，狀態燈即時顯示：執行中、正常、失敗、已停用。</p>
+    </div>
+    <div class="feature"><div class="emoji">🕐</div>
+      <h3 data-en>Know it actually ran</h3><h3 data-zh>確認真的跑過了</h3>
+      <p data-en>Last-run history straight from the system log: start → end time, duration, and exit status. Catch silent failures at a glance.</p>
+      <p data-zh>直接從系統日誌撈出上次執行紀錄：起訖時間、歷時、結束代碼。默默失敗的任務一眼抓出來。</p>
+    </div>
+    <div class="feature"><div class="emoji">▶️</div>
+      <h3 data-en>Run, pause, reschedule</h3><h3 data-zh>立即執行、暫停、改時間</h3>
+      <p data-en>Run a job now, toggle it on/off, or change its daily run time — with automatic config backup before every change.</p>
+      <p data-zh>隨時手動執行、開關排程、修改每天的執行時間——每次改動前都自動備份設定檔。</p>
+    </div>
+    <div class="feature"><div class="emoji">🛡️</div>
+      <h3 data-en>Safe by design</h3><h3 data-zh>安全至上</h3>
+      <p data-en>Backup → edit → verify → auto-restore on failure. Third-party jobs need explicit confirmation. No data ever leaves your Mac.</p>
+      <p data-zh>備份 → 修改 → 驗證 → 失敗自動還原。動到第三方排程會先跳確認。所有資料都留在你的 Mac 上。</p>
+    </div>
+  </div>
+</section>
+
+<section id="buy">
+  <h2 data-en>Pricing</h2>
+  <h2 data-zh>價格</h2>
+  <div class="price-card">
+    <div class="price">$4.99 <small data-en>one-time</small><small data-zh>買斷</small></div>
+    <ul>
+      <li data-en>✓ All features, no subscription</li><li data-zh>✓ 完整功能，不是訂閱制</li>
+      <li data-en>✓ Signed &amp; notarized by Apple</li><li data-zh>✓ Apple 簽名＋公證</li>
+      <li data-en>✓ Free updates for 1.x</li><li data-zh>✓ 1.x 版本免費更新</li>
+    </ul>
+    <!-- TODO: replace href with the Lemon Squeezy checkout link -->
+    <a class="cta" href="LEMON_SQUEEZY_URL" data-en>Buy Clocksmith</a>
+    <a class="cta" href="LEMON_SQUEEZY_URL" data-zh>購買 Clocksmith</a>
+    <span class="cta-sub" data-en>Secure checkout &amp; instant download via Lemon Squeezy</span>
+    <span class="cta-sub" data-zh>透過 Lemon Squeezy 安全結帳，付款後立即下載</span>
+  </div>
+</section>
+
+<section>
+  <h2 data-en>FAQ</h2>
+  <h2 data-zh>常見問題</h2>
+  <div class="faq">
+    <details>
+      <summary data-en>Why isn't this on the Mac App Store?</summary>
+      <summary data-zh>為什麼不在 Mac App Store 上架？</summary>
+      <p data-en>App Store apps must run in a sandbox that forbids managing launchd jobs — the entire point of Clocksmith. So it's sold directly instead, signed and notarized by Apple like any trustworthy Mac app.</p>
+      <p data-zh>App Store 規定 app 必須進沙盒，而沙盒禁止管理 launchd 排程——這正是 Clocksmith 的核心功能。所以改為直接販售，一樣有 Apple 簽名與公證，安全性相同。</p>
+    </details>
+    <details>
+      <summary data-en>What are "scheduled jobs" exactly?</summary>
+      <summary data-zh>「排程任務」到底是什麼？</summary>
+      <p data-en>macOS runs background tasks via launchd, configured by plist files in ~/Library/LaunchAgents. Scripts you (or your AI tools) set up to run daily, app updaters, sync helpers — Clocksmith reads and manages the user-level ones.</p>
+      <p data-zh>macOS 用 launchd 執行背景任務，設定放在 ~/Library/LaunchAgents。你（或你的 AI 工具）設定的每日腳本、app 更新器、同步小幫手都在裡面——Clocksmith 讀取並管理使用者層級的這些排程。</p>
+    </details>
+    <details>
+      <summary data-en>Does it collect any data?</summary>
+      <summary data-zh>會收集我的資料嗎？</summary>
+      <p data-en>No. Clocksmith has no analytics, no network calls, no account. Everything stays on your Mac.</p>
+      <p data-zh>不會。Clocksmith 沒有任何分析追蹤、不連網、不用註冊帳號。所有資料都留在你的 Mac。</p>
+    </details>
+    <details>
+      <summary data-en>Can it edit any schedule?</summary>
+      <summary data-zh>所有排程都能編輯嗎？</summary>
+      <p data-en>It edits simple daily (HH:MM) schedules safely, with automatic backups. Complex configurations (file watchers, multiple times) are shown read-only rather than risk breaking them.</p>
+      <p data-zh>單純的「每天 時:分」排程可以安全編輯（自動備份）。複雜設定（檔案監看、多組時間）會以唯讀顯示，避免改壞。</p>
+    </details>
+    <details>
+      <summary data-en>System requirements?</summary>
+      <summary data-zh>系統需求？</summary>
+      <p data-en>macOS 14 (Sonoma) or later. Native Swift app, Apple Silicon &amp; Intel.</p>
+      <p data-zh>macOS 14（Sonoma）以上。原生 Swift app，Apple Silicon 與 Intel 都支援。</p>
+    </details>
+  </div>
+</section>
+
+<footer>
+  <p data-en>© 2026 Shawn Chiao · <a href="mailto:shawn1763@gmail.com">Support</a> · No data collected, ever.</p>
+  <p data-zh>© 2026 Shawn Chiao · <a href="mailto:shawn1763@gmail.com">聯絡支援</a> · 不收集任何資料。</p>
+</footer>
+
+</div>
+<script>
+  function setLang(zh) {
+    document.documentElement.classList.toggle('zh', zh);
+    localStorage.setItem('clocksmith-lang', zh ? 'zh' : 'en');
+  }
+  function toggleLang() {
+    setLang(!document.documentElement.classList.contains('zh'));
+  }
+  const saved = localStorage.getItem('clocksmith-lang');
+  if (saved) {
+    setLang(saved === 'zh');
+  } else {
+    setLang(/^zh/i.test(navigator.language));
+  }
+</script>
+</body>
+</html>
