@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Clocksmith vs LaunchControl vs Lingon — launchd GUI comparison (2026)</title>
+<meta name="description" content="An honest comparison of macOS launchd GUI apps: Clocksmith ($4.99), LaunchControl (~$17+), Lingon 10 / Lingon Pro, and the free open-source options — which one fits how you actually use scheduled jobs.">
+<link rel="icon" href="assets/icon-256.png">
+<link rel="canonical" href="https://shawnchiao.github.io/clocksmith/compare.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Clocksmith">
+<meta property="og:title" content="Clocksmith vs LaunchControl vs Lingon — which launchd app fits you?">
+<meta property="og:description" content="Honest feature and pricing comparison of macOS launchd GUI apps, including who should NOT buy Clocksmith.">
+<meta property="og:url" content="https://shawnchiao.github.io/clocksmith/compare.html">
+<meta property="og:image" content="https://shawnchiao.github.io/clocksmith/assets/screenshot-en.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What is the best LaunchControl alternative?",
+      "acceptedAnswer": { "@type": "Answer", "text": "It depends on what you need. If you want full control over every launchd plist key, LaunchControl itself is the most capable tool. If you mainly want to see whether your scheduled jobs actually ran — with run history, exit codes, and error highlighting — Clocksmith ($4.99 one-time) is a simpler, cheaper alternative focused on monitoring." }
+    },
+    {
+      "@type": "Question",
+      "name": "Is there a free way to manage launchd agents on macOS?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Yes — Lingon 10 is free on the Mac App Store for basic guided editing, and open-source tools like launchd-ui exist. The trade-offs are limited features, no run history, and (for most open-source options) unsigned builds. Clocksmith offers a free 7-day full-featured trial." }
+    },
+    {
+      "@type": "Question",
+      "name": "Does any launchd GUI show run history?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Clocksmith reconstructs past runs from the macOS system log — start time, end time, duration, and exit code — so silently failing jobs are visible. As of our July 2026 survey, no other launchd GUI shows a run-history timeline; Lingon Pro and LaunchControl can inspect logs on demand." }
+    }
+  ]
+}
+</script>
+<style>
+  :root {
+    --bg: #ffffff; --fg: #1c2030; --muted: #5b6272; --card: #f4f5f8;
+    --accent: #2f66d0; --accent-fg: #ffffff; --border: #e3e5ec;
+    --good: #1f9d4d; --warn: #b58a00;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #12141c; --fg: #edeef2; --muted: #9aa1b5; --card: #1c1f2b;
+      --accent: #5d8ae8; --border: #2a2e3d; --good: #3fbf72; --warn: #d8b545;
+    }
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang TC",
+      "Noto Sans TC", sans-serif;
+    background: var(--bg); color: var(--fg); line-height: 1.65;
+  }
+  .wrap { max-width: 960px; margin: 0 auto; padding: 0 24px 60px; }
+  header { padding: 20px 0; display: flex; justify-content: space-between; align-items: center; }
+  .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 1.1rem; color: inherit; text-decoration: none; }
+  .brand img { width: 36px; height: 36px; }
+  .lang-toggle {
+    background: var(--card); border: 1px solid var(--border); color: var(--fg);
+    border-radius: 999px; padding: 6px 14px; cursor: pointer; font-size: .9rem;
+  }
+  h1 { font-size: 1.9rem; line-height: 1.3; margin: 26px 0 10px; letter-spacing: -.02em; }
+  .updated { color: var(--muted); font-size: .88rem; margin-bottom: 24px; }
+  h2 { font-size: 1.3rem; margin: 38px 0 10px; }
+  p { margin: 10px 0; }
+  .tldr {
+    background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+    padding: 18px 20px; margin: 18px 0;
+  }
+  .tldr strong { color: var(--accent); }
+  .tablewrap { overflow-x: auto; margin: 18px 0; }
+  table { border-collapse: collapse; width: 100%; min-width: 700px; font-size: .92rem; }
+  th, td { border: 1px solid var(--border); padding: 8px 10px; text-align: left; vertical-align: top; }
+  th { background: var(--card); }
+  td.me { background: color-mix(in srgb, var(--accent) 7%, transparent); }
+  .good { color: var(--good); }
+  .warn { color: var(--warn); }
+  .bad { color: var(--muted); }
+  .pick {
+    border: 1px solid var(--border); border-radius: 12px; padding: 16px 18px; margin: 12px 0;
+  }
+  .pick h3 { font-size: 1.05rem; margin-bottom: 6px; }
+  .cta {
+    display: inline-block; background: var(--accent); color: var(--accent-fg);
+    font-weight: 600; font-size: 1.02rem; padding: 12px 26px; border-radius: 12px;
+    text-decoration: none; margin-top: 8px;
+  }
+  .cta.ghost {
+    background: transparent; color: var(--accent);
+    border: 1.5px solid var(--accent); margin-left: 10px;
+  }
+  .ctabox { text-align: center; margin: 44px 0 10px; padding: 28px 20px;
+    background: var(--card); border-radius: 14px; }
+  .cta-sub { display: block; margin-top: 10px; font-size: .85rem; color: var(--muted); }
+  footer { color: var(--muted); font-size: .85rem; margin-top: 40px; }
+  footer a { color: inherit; }
+  html:not(.zh) [data-zh] { display: none !important; }
+  html.zh [data-en] { display: none !important; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <a class="brand" href="index.html"><img src="assets/icon-256.png" alt="Clocksmith icon">Clocksmith</a>
+  <button class="lang-toggle" onclick="toggleLang()"><span data-en>中文</span><span data-zh>English</span></button>
+</header>
+
+<h1 data-en>Clocksmith vs LaunchControl vs Lingon: which launchd app fits you?</h1>
+<h1 data-zh>Clocksmith、LaunchControl、Lingon 怎麼選？macOS 排程工具老實比較</h1>
+<p class="updated" data-en>Feature survey: July 2026 · We make Clocksmith, so read this knowing that — we've tried to be scrupulously fair, including telling you when to buy something else.</p>
+<p class="updated" data-zh>功能調查：2026 年 7 月 · Clocksmith 是我們自己做的，請帶著這個前提閱讀——我們盡力公平，包括直接告訴你什麼情況該買別家。</p>
+
+<div class="tldr">
+  <p data-en><strong>TL;DR:</strong> Want to <em>edit every plist key</em> like a pro? Buy <strong>LaunchControl</strong>. Want a <em>friendly wizard to create jobs</em> and don't care about monitoring? <strong>Lingon</strong> is fine. Want to <em>know your jobs actually ran</em> — run history, exit codes, red-flagged errors, AI-assisted diagnosis — for $4.99 one-time? That's <strong>Clocksmith</strong>.</p>
+  <p data-zh><strong>太長不看：</strong>想像專家一樣<em>編輯每一個 plist 設定</em>→ 買 <strong>LaunchControl</strong>。想要<em>友善的精靈幫你建排程</em>、不在乎監控 → <strong>Lingon</strong> 就夠。想<em>確認排程真的有跑</em>——執行歷史、結束代碼、錯誤標紅、一鍵丟給 AI 診斷——一次 $4.99 → 這就是 <strong>Clocksmith</strong>。</p>
+</div>
+
+<h2 data-en>The philosophical difference</h2>
+<h2 data-zh>本質上的差別</h2>
+<p data-en>Every launchd GUI before Clocksmith is an <em>editor</em>: it helps you write the configuration file, then its job is done. Clocksmith is a <em>monitor</em> first: its core question is "did last night's job actually run, and did it succeed?" It reconstructs run history from the macOS system log — start, end, duration, exit code — which, as of our July 2026 survey, no other launchd GUI does. Editing (daily / weekly / every-N-minutes schedules, create, enable, disable, run now) is deliberately kept simple.</p>
+<p data-zh>Clocksmith 之前的所有 launchd 圖形工具本質上都是<em>編輯器</em>：幫你把設定檔寫好，任務就結束了。Clocksmith 則以<em>監控</em>為先：它回答的核心問題是「昨晚的排程真的跑了嗎？成功了嗎？」它從 macOS 系統日誌重建執行歷史——開始、結束、歷時、結束代碼——以 2026 年 7 月的調查來說，這是市場上獨一份。編輯功能（每天／每週／每 N 分鐘、建立、啟用停用、立即執行）則刻意保持簡單。</p>
+
+<h2 data-en>At a glance</h2>
+<h2 data-zh>一覽表</h2>
+<div class="tablewrap">
+<table>
+  <tr>
+    <th data-en>Feature</th><th data-zh>功能</th>
+    <th>Clocksmith<br><span class="bad">$4.99</span></th>
+    <th>LaunchControl<br><span class="bad">~$17–34</span></th>
+    <th>Lingon 10 / Pro<br><span class="bad">Free / $23.99</span></th>
+    <th data-en>Open-source tools<br><span class="bad">Free</span></th>
+    <th data-zh>開源工具<br><span class="bad">免費</span></th>
+  </tr>
+  <tr>
+    <td data-en>Run history (past runs, duration, exit code)</td><td data-zh>執行歷史（過去每次的結果、歷時、代碼）</td>
+    <td class="me good" data-en>✅ Unique</td><td class="me good" data-zh>✅ 獨家</td>
+    <td class="bad" data-en>— (logs on demand)</td><td class="bad" data-zh>—（可現查 log）</td>
+    <td class="bad" data-en>— (Pro: log filter)</td><td class="bad" data-zh>—（Pro 可篩 log）</td>
+    <td class="bad">—</td>
+  </tr>
+  <tr>
+    <td data-en>Error highlighting + AI-assisted diagnosis</td><td data-zh>錯誤標紅＋AI 輔助診斷</td>
+    <td class="me good">✅</td>
+    <td class="bad">—</td>
+    <td class="bad">—</td>
+    <td class="bad">—</td>
+  </tr>
+  <tr>
+    <td data-en>Edit every launchd plist key</td><td data-zh>編輯所有 launchd plist 設定</td>
+    <td class="warn" data-en>⚠️ Common schedules only</td><td class="warn" data-zh>⚠️ 只支援常見排程</td>
+    <td class="good">✅</td>
+    <td class="good" data-en>✅ (Pro)</td><td class="good" data-zh>✅（Pro）</td>
+    <td class="warn">⚠️</td>
+  </tr>
+  <tr>
+    <td data-en>Create new jobs</td><td data-zh>建立新排程</td>
+    <td class="me good">✅</td>
+    <td class="good">✅</td>
+    <td class="good">✅</td>
+    <td class="warn" data-en>⚠️ varies</td><td class="warn" data-zh>⚠️ 看工具</td>
+  </tr>
+  <tr>
+    <td data-en>Auto-backup before every change</td><td data-zh>每次修改前自動備份</td>
+    <td class="me good">✅</td>
+    <td class="good" data-en>✅ deep validation</td><td class="good" data-zh>✅ 深度驗證</td>
+    <td class="good" data-en>✅ Pro: revisions</td><td class="good" data-zh>✅ Pro 有版本</td>
+    <td class="bad">—</td>
+  </tr>
+  <tr>
+    <td data-en>Signed &amp; notarized by Apple</td><td data-zh>Apple 簽名＋公證</td>
+    <td class="me good">✅</td>
+    <td class="good">✅</td>
+    <td class="good">✅</td>
+    <td class="bad" data-en>Mostly not</td><td class="bad" data-zh>大多沒有</td>
+  </tr>
+  <tr>
+    <td data-en>Traditional Chinese UI</td><td data-zh>繁體中文介面</td>
+    <td class="me good">✅</td>
+    <td class="bad">—</td>
+    <td class="good">✅</td>
+    <td class="bad" data-en>Rare</td><td class="bad" data-zh>罕見</td>
+  </tr>
+  <tr>
+    <td data-en>Pricing model</td><td data-zh>收費方式</td>
+    <td class="me" data-en>$4.99 one-time, 7-day full trial</td><td class="me" data-zh>$4.99 買斷，7 天全功能試用</td>
+    <td data-en>~$17–34 one-time, unlimited trial</td><td data-zh>~$17–34 買斷，無限期試用</td>
+    <td data-en>Free (10) / $23.99 (Pro)</td><td data-zh>免費（10）／$23.99（Pro）</td>
+    <td data-en>Free</td><td data-zh>免費</td>
+  </tr>
+</table>
+</div>
+
+<h2 data-en>Who should buy what — honestly</h2>
+<h2 data-zh>誰該買哪個——老實說</h2>
+
+<div class="pick">
+  <h3 data-en>Buy LaunchControl if…</h3><h3 data-zh>買 LaunchControl，如果你…</h3>
+  <p data-en>…you're a developer or sysadmin who needs the full plist vocabulary: WatchPaths, KeepAlive, socket activation, resource limits, system-level daemons. It's the most capable tool in this space, very actively maintained, and worth its price for professionals. Clocksmith doesn't try to compete there.</p>
+  <p data-zh>…你是工程師或系統管理員，需要完整的 plist 語彙：WatchPaths、KeepAlive、socket 啟動、資源限制、系統層級 daemon。它是這個領域功能最強、更新最勤的工具，對專業人士物有所值。Clocksmith 沒打算在這塊跟它競爭。</p>
+</div>
+
+<div class="pick">
+  <h3 data-en>Use Lingon if…</h3><h3 data-zh>用 Lingon，如果你…</h3>
+  <p data-en>…you mainly want a guided, friendly way to <em>create</em> a job once and forget it, and the free Mac App Store version covers your needs. Solid, long-maintained app.</p>
+  <p data-zh>…你主要想要一個友善的精靈，<em>建立</em>排程之後就不管了，而且免費的 Mac App Store 版就夠用。老牌、穩定的 app。</p>
+</div>
+
+<div class="pick">
+  <h3 data-en>Use the free open-source tools if…</h3><h3 data-zh>用免費開源工具，如果你…</h3>
+  <p data-en>…you're comfortable with unsigned builds and just want a quick list view. Check maintenance status first — several have known-broken features.</p>
+  <p data-zh>…你不介意未簽名的程式，只想要個簡單的清單畫面。用之前先確認維護狀態——有幾個的功能已知是壞的。</p>
+</div>
+
+<div class="pick">
+  <h3 data-en>Buy Clocksmith if…</h3><h3 data-zh>買 Clocksmith，如果你…</h3>
+  <p data-en>…you have jobs that <em>matter</em> — backups, sync scripts, AI-generated automations — and what keeps you up at night is "did it silently fail?" Run history with exit codes, red-flagged error lines, a failure banner, and one-click AI diagnosis answer that in seconds. It's also the cheapest paid option, and the only one with the monitoring angle.</p>
+  <p data-zh>…你有<em>不能失敗</em>的排程——備份、同步腳本、AI 幫你設的自動化——而你最怕的是「它悄悄失敗了我卻不知道」。執行歷史＋結束代碼、錯誤行標紅、失敗橫幅、一鍵 AI 診斷，幾秒鐘就給你答案。它同時是付費選項裡最便宜的，也是唯一主打監控的。</p>
+</div>
+
+<div class="ctabox">
+  <p data-en><strong>Try the monitoring angle yourself — free for 7 days, full-featured.</strong></p>
+  <p data-zh><strong>親自試試「監控優先」的差別——免費 7 天，功能全開。</strong></p>
+  <a class="cta" href="https://github.com/shawnchiao/clocksmith/releases/download/v1.2.0/Clocksmith-1.2.0.dmg" data-en>Download Clocksmith</a>
+  <a class="cta" href="https://github.com/shawnchiao/clocksmith/releases/download/v1.2.0/Clocksmith-1.2.0.dmg" data-zh>下載 Clocksmith</a>
+  <a class="cta ghost" href="index.html#buy" data-en>Buy $4.99</a>
+  <a class="cta ghost" href="index.html#buy" data-zh>購買 US$4.99</a>
+  <span class="cta-sub" data-en>macOS 14+ · Signed &amp; notarized · No subscription, no telemetry</span>
+  <span class="cta-sub" data-zh>macOS 14 以上 · Apple 簽名＋公證 · 無訂閱、零資料收集</span>
+</div>
+
+<footer>
+  <p data-en>Feature data surveyed July 2026 from public product pages, documentation, and hands-on testing. Spotted something outdated? <a href="mailto:shawn1763@gmail.com">Tell us</a> and we'll fix it. · <a href="index.html">Clocksmith home</a></p>
+  <p data-zh>功能資料於 2026 年 7 月依各產品公開頁面、文件與實測整理。發現過時資訊？<a href="mailto:shawn1763@gmail.com">告訴我們</a>，我們會更正。 · <a href="index.html">回 Clocksmith 首頁</a></p>
+</footer>
+
+</div>
+<script>
+  function setLang(zh) {
+    document.documentElement.classList.toggle('zh', zh);
+    document.documentElement.lang = zh ? 'zh-Hant' : 'en';
+    localStorage.setItem('clocksmith-lang', zh ? 'zh' : 'en');
+  }
+  function toggleLang() {
+    setLang(!document.documentElement.classList.contains('zh'));
+  }
+  const saved = localStorage.getItem('clocksmith-lang');
+  if (saved) { setLang(saved === 'zh'); } else { setLang(/^zh/i.test(navigator.language)); }
+</script>
+</body>
+</html>
