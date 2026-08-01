@@ -72,6 +72,10 @@
   }
   .cta-sub { display: block; margin-top: 10px; font-size: .85rem; color: var(--muted); }
   .shot { margin: 44px auto 0; max-width: 900px; }
+  .verdicts { display: grid; gap: 14px; margin-top: 18px; }
+  .verdicts figure { margin: 0; }
+  .verdicts img { width: 100%; border-radius: 10px; border: 1px solid var(--border); box-shadow: 0 6px 24px rgb(0 0 0 / .10); }
+  .verdicts figcaption { font-size: .92rem; color: var(--muted); margin-top: 6px; }
   .shot img { width: 100%; border-radius: 12px; box-shadow: 0 12px 40px rgb(0 0 0 / .18); border: 1px solid var(--border); }
   section { padding: 56px 0 0; }
   h2 { font-size: 1.5rem; margin-bottom: 20px; text-align: center; }
@@ -168,6 +172,33 @@
       <p data-en>Backup → edit → verify → auto-restore on failure. Third-party jobs need explicit confirmation. No data ever leaves your Mac.</p>
       <p data-zh>每次修改都是「備份 → 寫入 → 驗證」，失敗自動還原。要動到其他軟體的排程會先跟你確認。你的資料完全不會離開你的 Mac。</p>
     </div>
+  </div>
+</section>
+
+<section>
+  <h2 data-en>One glance, three answers</h2>
+  <h2 data-zh>一眼三個答案</h2>
+  <p data-en>Every verdict shows the evidence it rests on — not just a colored dot.</p>
+  <p data-zh>每個判定都附上它的依據——不只是一顆有顏色的燈。</p>
+  <div class="verdicts">
+    <figure>
+      <img data-en src="assets/verdict-green-en.png" alt="Verified green: ran successfully, with evidence and next run">
+      <img data-zh src="assets/verdict-green-zh.png" alt="已驗證的綠燈：成功執行，附證據與下次時間">
+      <figcaption data-en>🟢 Green is earned: the run was found in the system log.</figcaption>
+      <figcaption data-zh>🟢 綠燈是有證據才給的：這次執行真的在系統日誌裡。</figcaption>
+    </figure>
+    <figure>
+      <img data-en src="assets/verdict-orange-en.png" alt="Orange: a scheduled run never happened, the Mac was likely off">
+      <img data-zh src="assets/verdict-orange-zh.png" alt="橘燈：預定執行沒有發生，當時電腦很可能未開機">
+      <figcaption data-en>🟠 A run that silently never happened gets flagged — with the reason.</figcaption>
+      <figcaption data-zh>🟠 默默沒跑的排程會被標出來——連原因都告訴你。</figcaption>
+    </figure>
+    <figure>
+      <img data-en src="assets/verdict-red-en.png" alt="Red: failing job that launchd is throttling">
+      <img data-zh src="assets/verdict-red-zh.png" alt="紅燈：連續失敗、被 launchd 延後重啟的排程">
+      <figcaption data-en>🔴 Crash-looping jobs look idle everywhere else — here they say why.</figcaption>
+      <figcaption data-zh>🔴 連續崩潰被 launchd「罰站」的排程，在別處看起來像閒著——這裡直接說破。</figcaption>
+    </figure>
   </div>
 </section>
 
